@@ -242,20 +242,3 @@ jobs:
           asset_path: releases/poetry-${{ steps.tag.outputs.tag }}-win32.sha256sum
           asset_name: poetry-${{ steps.tag.outputs.tag }}-win32.sha256sum
           asset_content_type: text/pain
-      - name: Install Poetry
-        run: |
-          python get-poetry.py --preview -y
-      - name: Install dependencies
-        run: |
-          source $HOME/.poetry/env
-          poetry install --no-dev
-      - name: Build project for distribution
-        run: |
-          source $HOME/.poetry/env
-          poetry run poetry build
-      - name: Publish to PyPI
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          source $HOME/.poetry/env
-          poetry run poetry publish
