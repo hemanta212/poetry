@@ -15,10 +15,12 @@ jobs:
     - name: Get tag
       id: tag
       run: |
-        echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+        echo ::set-output name=tag::1.0.5
+        #${GITHUB_REF#refs/tags/}
     - name: Building release
       run: |
         make linux_release
+        ls releases/
     - name: Upload release file
       uses: actions/upload-artifact@v1
       with:
@@ -38,7 +40,8 @@ jobs:
     - name: Get tag
       id: tag
       run: |
-        echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+        echo ::set-output name=tag::1.0.5
+        #${GITHUB_REF#refs/tags/}
     - name: Set up Python 3.8
       uses: actions/setup-python@v1
       with:
@@ -89,7 +92,8 @@ jobs:
       id: tag
       shell: bash
       run: |
-        echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+        echo ::set-output name=tag::1.0.5
+        #${GITHUB_REF#refs/tags/}   
     - name: Set up Python 3.8
       uses: actions/setup-python@v1
       with:
@@ -147,7 +151,8 @@ jobs:
       - name: Get tag
         id: tag
         run: |
-          echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=tag::1.0.5
+        #${GITHUB_REF#refs/tags/}     
       - name: Download Linux release file
         uses: actions/download-artifact@master
         with:
@@ -242,20 +247,3 @@ jobs:
           asset_path: releases/poetry-${{ steps.tag.outputs.tag }}-win32.sha256sum
           asset_name: poetry-${{ steps.tag.outputs.tag }}-win32.sha256sum
           asset_content_type: text/pain
-      - name: Install Poetry
-        run: |
-          python get-poetry.py --preview -y
-      - name: Install dependencies
-        run: |
-          source $HOME/.poetry/env
-          poetry install --no-dev
-      - name: Build project for distribution
-        run: |
-          source $HOME/.poetry/env
-          poetry run poetry build
-      - name: Publish to PyPI
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          source $HOME/.poetry/env
-          poetry run poetry publish
